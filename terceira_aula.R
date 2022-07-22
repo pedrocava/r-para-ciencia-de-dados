@@ -132,14 +132,81 @@ palmerpenguins::penguins %>%
 # 1.  Fazer um grafico de pontos (geom_point), que cruza o comprimento do bico dos penguins
 # com a massa deles. E adicionar uma reta de regressao linear ('lm').
 
+grafico <- palmerpenguins::penguins %>%
+  ggplot2::ggplot(
+    ggplot2::aes(
+      x = bill_length_mm,
+      y = body_mass_g)) +
+  ggplot2::geom_point() +
+  ggplot2::geom_smooth(method = 'lm')
+
+
+grafico +
+  ggplot2::labs(
+    title = "Relação tamanho de bico x massa",
+    caption = "Fonte: Horst (2021)",
+    x = "Comprimento do bico (mm)",
+    y = "Massa corporal (g)") +
+  ggplot2::theme_minimal()
+
+
 # 2. Incrementar o gráfico anterior, modificando-o para que cada espécie possua uma
 # reta de regressão. Se possível, de forma que a cor da reta e dos pontos sejam
 # a mesma por espécie.
 
+
+grafico2 <- palmerpenguins::penguins %>%
+  ggplot2::ggplot(
+    ggplot2::aes(
+      x = bill_length_mm,
+      y = body_mass_g,
+      color = species)) +
+  ggplot2::geom_point() +
+  ggplot2::geom_smooth(method = 'lm')
+
+palmerpenguins::penguins %>%
+  ggplot2::ggplot(
+    ggplot2::aes(
+      x = bill_length_mm,
+      y = body_mass_g,
+      color = species)) +
+  ggplot2::geom_point() +
+  ggplot2::geom_smooth(method = 'lm') ->
+  grafico2
+
+grafico2 +
+  ggplot2::labs(
+    title = "Relação tamanho de bico x massa",
+    caption = "Fonte: Horst (2021)",
+    x = "Comprimento do bico (mm)",
+    y = "Massa corporal (g)",
+    color = "Espécie") +
+  ggplot2::theme_minimal()
+
+
 # 3. Fazer um boxplot de tamanho de bico, colorido de acordo com a espécie,
 # e facetando (facet_wrap) de acordo com o sexo.
+
+palmerpenguins::penguins %>%
+  ggplot2::ggplot(
+    ggplot2::aes(
+      y = bill_length_mm,
+      color = species)) +
+  ggplot2::geom_boxplot() +
+  ggplot2::facet_wrap(~ sex)
 
 
 ## DESAFIO:
 ## Faça uma funçao que receba como argumento um gráfico de ggplot2,
 ## e retorne ele com a legenda (caption) "Eu fiz o gráfico!".
+
+adiciona_legenda <- function(graph) {
+
+  graph +
+    ggplot2::labs(
+      caption = "Eu fiz o gráfico!")
+
+}
+
+grafico %>%
+  adiciona_legenda()
