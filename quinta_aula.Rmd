@@ -1,0 +1,228 @@
+---
+title: "Quinta Aula - Markdown e Lubridate"
+author: "Joao"
+date: '2022-07-28'
+output: html_document
+header_includes:
+  - \usepackage{amsmath}
+---
+
+Como justificar seu documento caso esse esteja HTML:
+
+```{css}
+<style>
+body {
+text-align: justify}
+</style>
+```
+
+```{r setup, include=FALSE}
+renv::restore()
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(lubridate)
+## Um bloco de código chunk
+```
+
+
+Chunks podem estar em diferentes linguagens. Para isso, basta definir dentro das chaves de configuração, `código`.
+
+
+```{sql nome_do_bloco_sql, eval=FALSE, error=TRUE}
+SELECT * FROM tabela
+```
+
+```{r nome_do_bloco_r, error=TRUE, eval=FALSE}
+SELECT * FROM tabela
+```
+
+Títulos e cabeçalhos:
+
+# TITULO MAIOR
+
+## TITULO MEDIO
+
+### TITULO PEQUENO
+
+Links puro: <https://www.twitter.com>
+
+[Link para o Twitter](https://www.twitter.com)
+
+*Itálico*
+
+**Negrito**
+
+$x+1 = 2$
+
+Texto na mesma linha $2\beta$
+
+
+Texto em outras linhas:
+
+$$
+x+2 = 3 \beta
+$$
+
+### Datas e Horas com Lubridate
+
+```{r, eval=FALSE}
+install.packages("lubridate")
+```
+
+```{r message=FALSE, warning=FALSE}
+library(lubridate)
+```
+
+```{r}
+lubridate::today() # Retorna ANO-MES-DIA ("2022-07-28")
+lubridate::now() # Retorna ANO-MES-DIA HORA:MINUTO:SEGUNDO FUSO_HORARIO ("2022-07-28 20:13:13 -03")
+```
+
+```{r}
+lubridate::dmy("25-05-1999") %>% class()
+lubridate::ymd("1999-05-25")
+
+c("1999-05-25", "1999-05-26") %>% lubridate::ymd()
+
+lubridate::dmy(25051999)
+
+lubridate::dmy_hms("25-05-1999 10:10:10", tz = "Brazil/East")
+```
+
+## Aritmética de Datas
+
+```{r}
+aniversario_joao <- lubridate::dmy_hms("25-05-1999 10:10:10")
+
+aniversario_joao - lubridate::hours(3)
+aniversario_joao - lubridate::days(5)
+aniversario_joao + lubridate::years(10)
+aniversario_joao + lubridate::weeks(4)
+aniversario_joao + lubridate::minutes(10)
+aniversario_joao - lubridate::seconds(90)
+```
+
+Para gerar uma sequencia para o passado ou para o futuro, podemos utilizar vetores em `days`.
+
+```{r}
+lubridate::ymd(c("1999-05-25", "1999-05-26")) + lubridate::days(5)
+
+lubridate::today() - lubridate::days(1:90)
+lubridate::today() + lubridate::days(0:90)
+```
+
+### Componentes de uma data!
+
+```{r}
+lubridate::now() %>%
+  lubridate::year()
+```
+
+```{r}
+lubridate::now() %>%
+  lubridate::day()
+
+lubridate::now() %>%
+  lubridate::wday()
+
+lubridate::now() %>%
+  lubridate::qday()
+
+lubridate::now() %>%
+  lubridate::hour()
+
+lubridate::now() %>%
+  lubridate::minute()
+
+lubridate::now() %>%
+  lubridate::second()
+```
+
+```{r}
+lubridate::now() %>%
+  lubridate::semester()
+
+lubridate::now() %>%
+  lubridate::quarter()
+
+lubridate::now() %>%
+  lubridate::week()
+
+lubridate::now() %>%
+  lubridate::isoweek()
+
+lubridate::now() %>%
+  lubridate::epiweek()
+```
+
+```{r}
+lubridate::leap_year(lubridate::now())
+lubridate::leap_year(2008)
+```
+
+## Intervals
+
+```{r}
+
+inicio <- lubridate::now()
+final <-lubridate::now() + lubridate::days(2) 
+
+intervalo <- lubridate::interval(
+  start = inicio, 
+  end = final,
+  tzone = "Brazil/East") 
+
+class(intervalo)
+```
+
+Como conferir se uma data/hora pertence a um intervalo de tempo:
+
+```{r}
+amanha <- lubridate::now() + lubridate::days(1)
+
+amanha %within% intervalo
+
+ontem <- lubridate::now() - lubridate::days(1)
+
+ontem %within% intervalo
+```
+
+
+Criando intervalos de forma mais rápida usando o `%--%`!
+
+```{r}
+inicio %--% final
+```
+
+Quantos minutos tempos dentro do nosso intervalo?
+
+```{r}
+(inicio %--% final) / lubridate::minutes(1)
+```
+Quantas horas tempos no nosso intervalo?
+
+```{r}
+(inicio %--% final) / lubridate::hours(1)
+```
+
+## renv - Dependency Management!
+
+Como iniciar um projeto com renv:
+
+```{r}
+renv::init()
+```
+
+```{r}
+renv::install("basedosdados")
+```
+```{r}
+basedosdados::bd_write
+
+renv::snapshot()
+```
+
+```{r}
+renv::restore()
+```
+
