@@ -218,12 +218,33 @@ termometro2(32, 32)
 termometro2(12)
 termometro2()
 
-
 # Exercícios
 
 # 1- Cebolinha
 # Crie uma função que recebe uma string chamada `frase`
 # e retorna os "r" invertidos por "l"
+
+
+c(primeiro = 1, segundo = 2) %>%
+  names()
+
+list(primeiro = 1, segundo = 2) %>%
+  names()
+
+# em python: {'primeiro': 1, 'segundo': 2}.keys()
+
+
+cebolinha <- function(frase) {
+
+  stringr::str_replace_all(
+    string = frase,
+    pattern = "r",
+    replacement = "l")
+
+}
+
+cebolinha("O rato roeu a roupa do Rei de Roma")
+
 
 # 2- FizzBuzz
 # Crie uma função que recebe um número e:
@@ -232,6 +253,42 @@ termometro2()
 # caso seja divísivel por 15, retorne "fizzbuzz"
 # caso não seja nem 3, nem 5, nem 15, retorne o próprio número
 
+fizzbuzz <- function(n) {
+
+  if (n %% 3 == 0 & n %% 15 != 0) {
+
+    return("fizz")
+
+  } else if (n %% 5 == 0 & n %% 15 != 0) {
+
+    return("buzz")
+
+  } else if (n %% 15 == 0) {
+
+    return("fizzbuzz")
+
+  } else {
+
+    return(n)
+
+  }
+
+}
+
+fizzbuzz(17)
+
 # 3- número par
 # crie uma função chamada `is_even` que recebe um argumento
 # `n` e retorna TRUE caso n seja par, FALSE caso não
+
+# definição: toda função cujo é lógico é chamada de predicado
+
+is_even <- function(n) {
+
+  n %% 2 == 0
+
+}
+
+is_even(1)
+is_even(2)
+is_even(3)
