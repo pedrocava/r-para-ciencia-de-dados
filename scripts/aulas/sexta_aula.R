@@ -301,8 +301,6 @@ cube(2)
 
 power(2)(3)
 
-
-
 power2 <- function(n) {
 
   function(x) {
@@ -345,7 +343,7 @@ tibble::tibble(
 
 # Fábricas de funções que modificam o comportamento de funções que já existem
 
-consulta_api_segura <- possibly(consulta_api, otherwise = NA)
+consulta_api_segura <- purrr::possibly(consulta_api, otherwise = NA)
 
 tibble::tibble(
   dados = purrr::map(1:100, ~ consulta_api_segura())) %>%
