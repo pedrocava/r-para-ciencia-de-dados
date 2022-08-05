@@ -40,9 +40,21 @@ purrr::discard(1:10, is_even)
 
 purrr::every(1:10, is_even)
 
+purrr::every(
+  letters,
+  ~ .x %in% c("a", "e", "i", "o", "u"))
+
 purrr::some(1:10, is_even)
 
+purrr::some(
+  letters,
+  ~ .x %in% c("a", "e", "i", "o", "u"))
+
 purrr::none(1:10, is_even)
+
+purrr::none(
+  letters,
+  ~ .x %in% c("a", "e", "i", "o", "u"))
 
 # Aplicação de funções
 
@@ -137,8 +149,8 @@ palmerpenguins::penguins %>%
 # Outro exemplo: estimar a distribuição de um coeficiente
 # por subset regressions
 
-purrr::map(
-  1:500,
+1:500 %>%
+  purrr::map(
   ~ dplyr::sample_frac(palmerpenguins::penguins, .5)) %>%
   tibble::tibble(data = .) %>%
   dplyr::mutate(
@@ -150,8 +162,7 @@ purrr::map(
     betas = purrr::map_dbl(
       models,
       ~ coefficients(.x) %>%
-        purrr::pluck("bill_length_mm")
-    )) ->
+        purrr::pluck("bill_length_mm"))) ->
   experiment
 
 experiment %>%
@@ -259,6 +270,26 @@ linear_function <- function(a, b) {
 
 }
 
+saudacoes <- function(horario, nome) {
+
+  glue::glue("{horario}, {nome}!")
+
+  }
+
+saudacoes("Tarde", "Fulano")
+
+saudacoes2 <- function(horario) {
+
+  function(nome) {
+
+    glue::glue("{horario}, {nome}!")
+
+  }
+
+}
+
+saudacoes2("Tarde")("Fulano")
+
 # a curva de exemplo é a função f(x) = 2 + 2x
 
 curva_exemplo <- linear_function(2, 2)
@@ -283,6 +314,7 @@ sum(2, 2, 2)
 
 `%>%`(2, log) # a mesma coisa que 2 %>% log()
 
+`<-` %>% is.function()
 # currying: usar parênteses seguidos
 
 linear_function(2, 2)(5)
