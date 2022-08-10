@@ -1,0 +1,81 @@
+cebolinha <- function(string) {
+
+  string %>%
+    stringr::str_split(pattern = "") %>%
+    purrr::map_chr(
+      function(phrase) {
+
+        stringr::str_replace(
+          phrase,
+          replacement = c(
+            "r" = "l",
+            "l" = "r")) %>%
+          purrr::reduce(~ glue::glue("{.x}{.y}"))
+
+      })
+
+}
+
+c(
+  "O rato roeu a roupa do rei de roma",
+  "O curso de R está acabando") %>%
+  cebolinha()
+
+
+# --
+
+# Funções recursivas
+
+# sequência de Fibonacci
+
+fibonacci <- function(n) {
+
+  if (n == 1 | n == 2) {
+
+    return(1)
+
+  } else {
+
+    return(fibonacci(n-1) + fibonacci(n-2))
+
+   }
+
+}
+
+fibonacci(5)
+
+# fatorial de um número
+
+factorial <- function(n) {
+
+  if (n == 0) {
+
+    return(1)
+
+  } else {
+
+    return(n*factorial(n-1))
+
+  }
+
+}
+
+factorial(10)
+
+# máximo divisor comum
+
+gcd <- function(x, y) {
+
+  if (y == 0) {
+
+    return(x)
+
+  } else {
+
+    gcd(y, x %% y)
+
+  }
+
+}
+
+gcd(12, 2)
